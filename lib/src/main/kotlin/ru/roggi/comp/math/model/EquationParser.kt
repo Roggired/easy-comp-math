@@ -25,7 +25,7 @@ fun createEquationFrom(string: String): Equation {
             '(' -> openParenthesises++
             ')' -> openParenthesises--
             '+', '-' -> {
-                if (openParenthesises == 0 && term.last() != '^') {
+                if (openParenthesises == 0 && term.isNotEmpty() && term.last() != '^') {
                     terms.add(parse(term))
                     term = ""
                 }

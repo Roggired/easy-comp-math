@@ -155,11 +155,11 @@ class Presenter {
                 return ""
             }
 
-            return try {
-                number.toInt().toString()
-            } catch (e: NumberFormatException) {
-                "%.3f".format(number)
+            if (number.toInt() - number == 0.0) {
+                return number.toInt().toString()
             }
+
+            return "%.3f".format(number)
         }
     }
 }
