@@ -11,25 +11,25 @@ import kotlin.math.tan
  * @since 1.0
  */
 class Equation(
-    internal val terms: Array<Term>
-) {
+    internal val terms: MutableList<Term>
+): Cloneable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
         other as Equation
 
-        if (!terms.contentEquals(other.terms)) return false
+        if (!terms.toTypedArray().contentEquals(other.terms.toTypedArray())) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return terms.contentHashCode()
+        return terms.toTypedArray().contentHashCode()
     }
 
     override fun toString(): String {
-        return "Equation(tokens=${terms.contentToString()})"
+        return "Equation(tokens=${terms.toTypedArray().contentToString()})"
     }
 
     fun evaluate(x: Double): Double = terms.fold(0.0, { acc, term -> acc + term.evaluate(x) })
@@ -48,12 +48,22 @@ class Equation(
                 + evaluateFirstDerivative(x + 2 * DERIVATIVE_STEP)
                 ) / (12 * DERIVATIVE_STEP)
 
+    fun multiplyOnConstant(constant: Double) {
+        terms.forEach {
+            it.multiplyOnConst(constant)
+        }
+    }
+
+    fun addTerm(term: Term) = terms.add(term)
+
+    public override fun clone(): Equation = Equation(terms.toTypedArray().copyOf().toMutableList())
+
     companion object {
         private const val DERIVATIVE_STEP = 0.00001
     }
 }
 
-fun emptyEquation(): Equation = Equation(arrayOf(ConstantTerm(Sign("+"), 1.0)))
+fun emptyEquation(): Equation = Equation(mutableListOf(ConstantTerm(Sign("+"), 1.0)))
 
 class Sign(private val value: String) {
     fun applyTo(x: Double): Double =
@@ -72,7 +82,7 @@ class Sign(private val value: String) {
     fun isPlus(): Boolean = value == "+"
 }
 
-internal class Operation(internal val op: String) {
+class Operation(private val op: String) {
     fun apply(acc: Double, value: Double): Double =
         when(op) {
             "*" -> acc * value
@@ -81,7 +91,7 @@ internal class Operation(internal val op: String) {
         }
 }
 
-internal class MultiTerm(
+class MultiTerm(
     sign: Sign,
     factor: Double,
     internal val terms: Array<Term>,
@@ -102,24 +112,29 @@ internal class MultiTerm(
 
 abstract class Term(
     internal val sign: Sign,
-    internal val factor: Double
+    internal var factor: Double
 ) {
     companion object Presenter
 
     abstract fun evaluate(x: Double): Double
+
+    fun multiplyOnConst(constant: Double) {
+        factor *= constant
+    }
+
     override fun toString(): String {
         return "Term(sign=$sign, factor=$factor)"
     }
 }
 
-internal class LinearTerm(
+class LinearTerm(
     sign: Sign,
     factor: Double
 ): Term(sign, factor) {
     override fun evaluate(x: Double): Double = sign.applyTo(factor * x)
 }
 
-internal class ConstantEquationTerm(
+class ConstantEquationTerm(
     sign: Sign,
     factor: Double,
     baseEquation: Equation
@@ -127,14 +142,14 @@ internal class ConstantEquationTerm(
     override fun evaluate(x: Double): Double = super.evaluate(x) * baseEquation.evaluate(x)
 }
 
-internal class ConstantTerm(
+class ConstantTerm(
     sign: Sign,
     factor: Double
 ): Term(sign, factor) {
     override fun evaluate(x: Double): Double = sign.applyTo(factor)
 }
 
-internal abstract class ComplexTerm(
+abstract class ComplexTerm(
     sign: Sign,
     factor: Double,
     internal val baseEquation: Equation
@@ -146,7 +161,7 @@ internal abstract class ComplexTerm(
     }
 }
 
-internal class PolynomialTerm(
+class PolynomialTerm(
     sign: Sign,
     factor: Double,
     baseEquation: Equation,
@@ -159,7 +174,7 @@ internal class PolynomialTerm(
     }
 }
 
-internal class TrigonometricTerm(
+class TrigonometricTerm(
     sign: Sign,
     factor: Double,
     baseEquation: Equation,
@@ -173,9 +188,9 @@ internal class TrigonometricTerm(
     }
 }
 
-internal fun ctg(x: Double): Double = 1/ tan(x)
+fun ctg(x: Double): Double = 1/ tan(x)
 
-internal class LogarithmicTerm(
+class LogarithmicTerm(
     sign: Sign,
     factor: Double,
     baseEquation: Equation,

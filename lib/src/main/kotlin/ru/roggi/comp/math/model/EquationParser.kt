@@ -5,7 +5,12 @@ import kotlin.math.sin
 import kotlin.math.tan
 
 fun main() {
-    val equation = createEquationFrom("sin(((x + x^2)*1/x)*100)")
+    val equation = createEquationFrom("x^2")
+    println(equation.evaluate(3.0))
+
+    val newEquation = equation.clone()
+    newEquation.addTerm(ConstantTerm(Sign("+"), 1.0))
+    println(newEquation.evaluate(3.0))
     println(equation.evaluate(3.0))
 }
 
@@ -41,7 +46,7 @@ fun createEquationFrom(string: String): Equation {
 
     terms.add(parse(term))
 
-    return Equation(terms.toTypedArray())
+    return Equation(terms)
 }
 
 private fun parse(term: String): Term =
@@ -174,4 +179,4 @@ private fun createTerm(signStr: String, factorStr: String, term: String, baseEqu
     throw IllegalArgumentException("Found unparsable symbols")
 }
 
-private fun linearEquation(): Equation = Equation(arrayOf(LinearTerm(Sign("+"), 1.0)))
+private fun linearEquation(): Equation = Equation(mutableListOf(LinearTerm(Sign("+"), 1.0)))
