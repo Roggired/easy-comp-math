@@ -35,5 +35,6 @@ class FileGraphScene(
         state.accuracy.value = accuracy
 
         stateReducer(GraphIntent(accuracy, bounds.first, bounds.second, equation))
+        sceneContext.remove("fileName")
     }
 }

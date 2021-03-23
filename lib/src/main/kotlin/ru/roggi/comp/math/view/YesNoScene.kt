@@ -38,6 +38,7 @@ class YesNoScene(
                 break
             }
         }
+        sceneContext.remove("greetings")
         println(endings)
     }
 }

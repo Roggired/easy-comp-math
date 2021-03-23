@@ -37,6 +37,7 @@ class GraphScene(
             if (sceneContext.get("equation") !is Equation) throw IllegalArgumentException("Found illegal equation in sceneContext: should be an instance of Equation")
 
             state.equation.value = sceneContext.get("equation") as Equation
+            sceneContext.remove("equation")
         }
 
         if (sceneContext.get("leftBound") == null || sceneContext.get("rightBound") == null) {
@@ -57,6 +58,9 @@ class GraphScene(
                 is Int -> state.rightBound.value = rightBound.toDouble()
                 else -> throw IllegalArgumentException("Right bound should be a number")
             }
+
+            sceneContext.remove("leftBound")
+            sceneContext.remove("rightBound")
         }
 
         if (sceneContext.get("accuracy") == null) {
@@ -75,6 +79,7 @@ class GraphScene(
             }
 
             state.accuracy.value = sceneContext.get("accuracy") as Double
+            sceneContext.remove("accuracy")
         }
 
         stateReducer(GraphIntent(state.accuracy.value!!, state.leftBound.value!!, state.rightBound.value!!, state.equation.value!!))
