@@ -62,9 +62,13 @@ class Presenter {
                         append(presentSignAndFactorErasureOne(term.sign, term.factor))
                         append("x")
                     }
-                    is ConstantTerm -> { presentSignAndFactor(term.sign, term.factor)}
-                    is ConstantEquationTerm -> append(presentEquation(term.baseEquation))
+                    is ConstantTerm -> append(presentSignAndFactor(term.sign, term.factor))
+                    is ConstantEquationTerm -> {
+                        append(presentSignAndFactor(term.sign, term.factor))
+                        append(presentEquation(term.baseEquation))
+                    }
                     is PolynomialTerm -> {
+                        append(presentSignAndFactorErasureOne(term.sign, term.factor))
                         if (term.baseEquation.terms.size == 1 && term.baseEquation.terms[0] is LinearTerm) {
                             append("x")
                         } else {
@@ -74,19 +78,24 @@ class Presenter {
                         append(presentDoubleErasureOne(term.power))
                     }
                     is TrigonometricTerm -> {
+                        append(presentSignAndFactorErasureOne(term.sign, term.factor))
                         append(term.functionName)
                         append(presentEquation(term.baseEquation))
                     }
                     is LogarithmicTerm -> {
+                        append(presentSignAndFactorErasureOne(term.sign, term.factor))
                         append("log^")
                         append(presentDoubleErasureOne(term.logBase))
                         append(presentEquation(term.baseEquation))
                     }
-                    is MultiTerm -> append(presentMultiTerm(term))
+                    is MultiTerm -> {
+                        append(presentSignAndFactorErasureOne(term.sign, term.factor))
+                        append(presentMultiTerm(term))
+                    }
                     else -> {/*nothing*/}
                 }
             }
-            return deleteExtraPlus(stringBuilder).trim()
+            return stringBuilder.toString().trim()
         }
 
         private fun presentEquation(equation: Equation): String {
@@ -96,7 +105,7 @@ class Presenter {
                 append(present(equation))
                 append(")")
             }
-            return deleteExtraPlus(stringBuilder).trim()
+            return stringBuilder.toString().trim()
         }
 
         private fun presentMultiTerm(multiTerm: MultiTerm): String {
@@ -117,7 +126,7 @@ class Presenter {
                 if (operation.hasNext()) stringBuilder.append(operation.next())
             }
 
-            return deleteExtraPlus(stringBuilder).trim()
+            return stringBuilder.toString().trim()
         }
 
         private fun deleteExtraPlus(stringBuilder: StringBuilder): String {
