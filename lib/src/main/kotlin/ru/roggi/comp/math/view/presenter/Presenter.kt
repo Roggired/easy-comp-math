@@ -47,7 +47,6 @@ class Presenter {
                             return@forEach
                         }
 
-                        stringBuilder.append(presentSignAndFactor(it.sign, it.factor))
                         stringBuilder.append(presentTerm(it))
                         stringBuilder.append(" ")
                     }
@@ -59,8 +58,11 @@ class Presenter {
             val stringBuilder = StringBuilder()
             with(stringBuilder) {
                 when (term) {
-                    is LinearTerm -> append("x")
-                    is ConstantTerm -> { /*nothing*/  }
+                    is LinearTerm -> {
+                        append(presentSignAndFactorErasureOne(term.sign, term.factor))
+                        append("x")
+                    }
+                    is ConstantTerm -> { presentSignAndFactor(term.sign, term.factor)}
                     is ConstantEquationTerm -> append(presentEquation(term.baseEquation))
                     is PolynomialTerm -> {
                         if (term.baseEquation.terms.size == 1 && term.baseEquation.terms[0] is LinearTerm) {
@@ -69,7 +71,7 @@ class Presenter {
                             append(presentEquation(term.baseEquation))
                         }
                         append("^")
-                        append(presentDouble(term.power))
+                        append(presentDoubleErasureOne(term.power))
                     }
                     is TrigonometricTerm -> {
                         append(term.functionName)
@@ -77,7 +79,7 @@ class Presenter {
                     }
                     is LogarithmicTerm -> {
                         append("log^")
-                        append(presentDouble(term.logBase))
+                        append(presentDoubleErasureOne(term.logBase))
                         append(presentEquation(term.baseEquation))
                     }
                     is MultiTerm -> append(presentMultiTerm(term))
@@ -104,7 +106,7 @@ class Presenter {
                 return ""
             }
 
-            stringBuilder.append(presentSignAndFactor(multiTerm.sign, multiTerm.factor))
+            stringBuilder.append(presentSignAndFactorErasureOne(multiTerm.sign, multiTerm.factor))
 
             val term = multiTerm.terms.iterator()
             val operation = multiTerm.operations.iterator()
@@ -127,34 +129,57 @@ class Presenter {
             }
         }
 
-        private fun presentSignAndFactor(sign: Sign, factor: Double): String {
+        private fun presentSignAndFactorErasureOne(sign: Sign, factor: Double): String {
             val stringBuilder = StringBuilder()
             if (sign.isMinus() && factor < 0) {
-                stringBuilder.append("+ ").append(presentFactor(factor))
+                stringBuilder.append("+ ").append(presentDoubleErasureOne(factor))
             }
 
             if (sign.isMinus() && factor > 0) {
-                stringBuilder.append("- ").append(presentFactor(factor))
+                stringBuilder.append("- ").append(presentDoubleErasureOne(factor))
             }
 
             if (sign.isPlus() && factor < 0) {
-                stringBuilder.append("- ").append(presentFactor(factor))
+                stringBuilder.append("- ").append(presentDoubleErasureOne(factor))
             }
 
             if (sign.isPlus() && factor > 0) {
-                stringBuilder.append("+ ").append(presentFactor(factor))
+                stringBuilder.append("+ ").append(presentDoubleErasureOne(factor))
             }
 
             return stringBuilder.toString()
         }
 
-        private fun presentFactor(factor: Double): String = presentDouble(abs(factor))
+        private fun presentSignAndFactor(sign: Sign, factor: Double): String {
+            val stringBuilder = StringBuilder()
+            if (sign.isMinus() && factor < 0) {
+                stringBuilder.append("+ ").append(presentDouble(factor))
+            }
 
-        private fun presentDouble(number: Double): String {
+            if (sign.isMinus() && factor > 0) {
+                stringBuilder.append("- ").append(presentDouble(factor))
+            }
+
+            if (sign.isPlus() && factor < 0) {
+                stringBuilder.append("- ").append(presentDouble(factor))
+            }
+
+            if (sign.isPlus() && factor > 0) {
+                stringBuilder.append("+ ").append(presentDouble(factor))
+            }
+
+            return stringBuilder.toString()
+        }
+
+        private fun presentDoubleErasureOne(number: Double): String {
             if (number == 1.0) {
                 return ""
             }
 
+            return presentDouble(number)
+        }
+
+        private fun presentDouble(number: Double): String {
             if (number.toInt() - number == 0.0) {
                 return number.toInt().toString()
             }

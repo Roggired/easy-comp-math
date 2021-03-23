@@ -52,13 +52,29 @@ private fun parseSingleTerm(term: String): Term {
 
     while (left < term.length - 1 && term[left] != '(') left++
 
-    if (left == term.length - 1) return invokeCreateTerm(term, emptyEquation())
+    if (left == term.length - 1) return invokeCreateTerm(term)
 
     while (right > 0 && term[right] != ')') right--
 
-    if (right == 0) return invokeCreateTerm(term, emptyEquation())
+    if (right == 0) return invokeCreateTerm(term)
 
     return invokeCreateTerm(term.substring(0, left), createEquationFrom(term.substring(left + 1, right)))
+}
+
+private fun invokeCreateTerm(term: String): Term {
+    val sign = getSign(term)
+    var factor = getFactor(term)
+
+    var targetIndex = factor.length
+    if (term.startsWith("-") || term.startsWith("+")){
+        targetIndex++
+    }
+
+    if (factor.isEmpty()) {
+        factor = "1"
+    }
+
+    return createTerm(sign, factor, term.substring(targetIndex))
 }
 
 private fun invokeCreateTerm(term: String, baseEquation: Equation): Term {
@@ -137,6 +153,17 @@ private fun getFactor(term: String): String {
     }
 
     return factor
+}
+
+private fun createTerm(signStr: String, factorStr: String, term: String): Term {
+    val sign = Sign(signStr)
+    val factor = factorStr.toDouble()
+
+    if (term.isEmpty()) {
+        return ConstantTerm(sign, factor)
+    }
+
+    return createTerm(signStr, factorStr, term, emptyEquation())
 }
 
 private fun createTerm(signStr: String, factorStr: String, term: String, baseEquation: Equation): Term {
