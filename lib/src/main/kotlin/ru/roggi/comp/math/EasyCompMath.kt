@@ -15,9 +15,9 @@ const val VERSION = "1.0"
 
 const val FILE_GRAPH_ROUT = "fileMethod"
 const val GRAPH_ROUTE = "method"
-const val INPUT_ACCURACY_ROUTE = "inputAccuracy"
-const val INPUT_BOUNDS_ROUTE = "inputBounds"
-const val INPUT_EQUATION_ROUTE = "inputEquation"
+internal const val INPUT_ACCURACY_ROUTE = "inputAccuracy"
+internal const val INPUT_BOUNDS_ROUTE = "inputBounds"
+internal const val INPUT_EQUATION_ROUTE = "inputEquation"
 
 /**
  * Should be started with TornadoFX.launch<EasyCompMath>("INITIAL_ROUTE_HERE", "PACKAGE_WITH_ROUTER_BUILDER_HERE")
@@ -61,7 +61,7 @@ class EasyCompMath : App(GraphView::class, RootStyles::class) {
                     register(FILE_GRAPH_ROUT, FileGraphScene(GraphService.graphModel!!))
                     register(
                         INPUT_ACCURACY_ROUTE, InputScene(
-                            "Enter accuracy between ${
+                            "Enter accuracy for graph between ${
                                 presenter.presentAccuracy(
                                     accuracyBounds.first)
                             } and ${
@@ -74,7 +74,7 @@ class EasyCompMath : App(GraphView::class, RootStyles::class) {
                         ) { t -> t in accuracyBounds.first..accuracyBounds.second })
                     register(
                         INPUT_BOUNDS_ROUTE, InputTwoScene(
-                            "Enter bounds between ${
+                            "Enter bounds for graph between ${
                                 presenter.presentBound(
                                     leftAndRightBoundBounds.first
                                 )

@@ -28,22 +28,15 @@ class GraphScene(
     graphModel: GraphModel
 ): StatefulScene<GraphModel>(graphModel) {
     override fun start(sceneContext: SceneContext, stateReducer: (Intent) -> Unit) {
-        if (sceneContext.get("accuracy") == null) {
-            sceneContext.router.switch(INPUT_ACCURACY_ROUTE) {
-                state.accuracy.value = (it as InputIntent<*>).value as Double
+        if (sceneContext.get("equation") == null) {
+            sceneContext.router.switch(INPUT_EQUATION_ROUTE) {
+                it as EquationIntent
+                state.equation.value = it.equation
             }
         } else {
-            val accuracy = when (val temp = sceneContext.get("accuracy")) {
-                is Int -> temp.toDouble()
-                is Double -> temp
-                else -> throw IllegalArgumentException("Accuracy should be a number")
-            }
+            if (sceneContext.get("equation") !is Equation) throw IllegalArgumentException("Found illegal equation in sceneContext: should be an instance of Equation")
 
-            if (accuracy == 0.0) {
-                throw IllegalArgumentException("Accuracy cannot be 0")
-            }
-
-            state.accuracy.value = sceneContext.get("accuracy") as Double
+            state.equation.value = sceneContext.get("equation") as Equation
         }
 
         if (sceneContext.get("leftBound") == null || sceneContext.get("rightBound") == null) {
@@ -66,15 +59,22 @@ class GraphScene(
             }
         }
 
-        if (sceneContext.get("equation") == null) {
-            sceneContext.router.switch(INPUT_EQUATION_ROUTE) {
-                it as EquationIntent
-                state.equation.value = it.equation
+        if (sceneContext.get("accuracy") == null) {
+            sceneContext.router.switch(INPUT_ACCURACY_ROUTE) {
+                state.accuracy.value = (it as InputIntent<*>).value as Double
             }
         } else {
-            if (sceneContext.get("equation") !is Equation) throw IllegalArgumentException("Found illegal equation in sceneContext: should be an instance of Equation")
+            val accuracy = when (val temp = sceneContext.get("accuracy")) {
+                is Int -> temp.toDouble()
+                is Double -> temp
+                else -> throw IllegalArgumentException("Accuracy should be a number")
+            }
 
-            state.equation.value = sceneContext.get("equation") as Equation
+            if (accuracy == 0.0) {
+                throw IllegalArgumentException("Accuracy cannot be 0")
+            }
+
+            state.accuracy.value = sceneContext.get("accuracy") as Double
         }
 
         stateReducer(GraphIntent(state.accuracy.value!!, state.leftBound.value!!, state.rightBound.value!!, state.equation.value!!))
