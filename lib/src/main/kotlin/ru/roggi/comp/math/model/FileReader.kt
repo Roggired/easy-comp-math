@@ -1,7 +1,6 @@
 package ru.roggi.comp.math.model
 
 import java.io.FileInputStream
-import java.lang.NumberFormatException
 import java.util.*
 
 

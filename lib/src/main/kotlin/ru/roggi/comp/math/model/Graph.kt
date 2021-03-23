@@ -2,7 +2,8 @@ package ru.roggi.comp.math.model
 
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleObjectProperty
-import tornadofx.*
+import tornadofx.getValue
+import tornadofx.setValue
 
 class Graph {
     val accuracyProperty = SimpleDoubleProperty(this, "accuracy", 0.1)

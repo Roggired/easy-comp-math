@@ -1,14 +1,9 @@
 package ru.roggi.comp.math.view.presenter
 
 import ru.roggi.comp.math.model.*
-import ru.roggi.comp.math.model.ConstantEquationTerm
-import ru.roggi.comp.math.model.ConstantTerm
-import ru.roggi.comp.math.model.LinearTerm
-import ru.roggi.comp.math.model.PolynomialTerm
-import kotlin.math.abs
 
 
-const val ACCURACY_FORMAT = "%.4f"
+const val ACCURACY_FORMAT = "%.3f"
 const val BOUND_FORMAT = "%.1f"
 
 class Presenter {
