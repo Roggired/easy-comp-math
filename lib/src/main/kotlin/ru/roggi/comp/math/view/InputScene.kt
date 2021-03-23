@@ -24,9 +24,9 @@ class InputIntent<T>(val value: T): Intent
  */
 class InputScene<T: Any>(
     private val greetings: String,
-    private val endings: String,
     private val cast: (userInput: String) -> T,
     private val validate: (t: T) -> Boolean,
+    private val endings: String = "",
 ): Scene {
     override fun start(sceneContext: SceneContext, stateReducer: (Intent) -> Unit) {
         while (true) {

@@ -13,7 +13,7 @@ class EquationIntent(val equation: Equation): Intent
 
 class EquationScene(
     private val greetings: String,
-    private val endings: String,
+    private val endings: String = ""
 ): Scene {
     override fun start(sceneContext: SceneContext, stateReducer: (Intent) -> Unit) {
         println(greetings)

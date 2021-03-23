@@ -15,6 +15,7 @@ const val VERSION = "1.0"
 
 const val FILE_GRAPH_ROUT = "fileMethod"
 const val GRAPH_ROUTE = "method"
+const val YES_NO_ROUTE = "yesNo"
 internal const val INPUT_ACCURACY_ROUTE = "inputAccuracy"
 internal const val INPUT_BOUNDS_ROUTE = "inputBounds"
 internal const val INPUT_EQUATION_ROUTE = "inputEquation"
@@ -69,9 +70,8 @@ class EasyCompMath : App(GraphView::class, RootStyles::class) {
                                     accuracyBounds.second
                                 )
                             }",
-                            "",
                             String::toDouble,
-                        ) { t -> t in accuracyBounds.first..accuracyBounds.second })
+                            { t -> t in accuracyBounds.first..accuracyBounds.second }))
                     register(
                         INPUT_BOUNDS_ROUTE, InputTwoScene(
                             "Enter bounds for graph between ${
@@ -83,15 +83,15 @@ class EasyCompMath : App(GraphView::class, RootStyles::class) {
                                     leftAndRightBoundBounds.second
                                 )
                             }",
-                            "",
                             String::toDouble,
                             String::toDouble,
-                        ) { left, right ->
-                            left in leftAndRightBoundBounds.first..leftAndRightBoundBounds.second
-                                    && right in leftAndRightBoundBounds.first..leftAndRightBoundBounds.second
-                                    && left < right
-                        })
-                    register(INPUT_EQUATION_ROUTE, EquationScene("Enter equation", ""))
+                            { left, right ->
+                                left in leftAndRightBoundBounds.first..leftAndRightBoundBounds.second
+                                && right in leftAndRightBoundBounds.first..leftAndRightBoundBounds.second
+                                && left < right
+                            }))
+                    register(INPUT_EQUATION_ROUTE, EquationScene("Enter equation"))
+                    register(YES_NO_ROUTE, YesNoScene())
                 }.switch(easyCompMathRoute)
         }.start()
     }

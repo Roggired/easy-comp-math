@@ -27,10 +27,10 @@ class InputTwoIntent<T, E>(val a: T, val b: E): Intent
  */
 class InputTwoScene<T: Any, E: Any>(
     private val greetings: String,
-    private val endings: String,
     private val castT: (userInput: String) -> T,
     private val castE: (userInput: String) -> E,
     private val validate: (t: T, e: E) -> Boolean,
+    private val endings: String = "",
 ): Scene {
     override fun start(sceneContext: SceneContext, stateReducer: (Intent) -> Unit) {
         while (true) {

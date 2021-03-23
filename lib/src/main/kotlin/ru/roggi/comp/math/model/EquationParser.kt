@@ -4,15 +4,6 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.tan
 
-fun main() {
-    val equation = createEquationFrom("x^2")
-    println(equation.evaluate(3.0))
-
-    val newEquation = equation.clone()
-    newEquation.addTerm(ConstantTerm(Sign("+"), 1.0))
-    println(newEquation.evaluate(3.0))
-    println(equation.evaluate(3.0))
-}
 
 fun createEquationFrom(string: String): Equation {
     val openParenthesisesNumber = string.count { c -> c == '(' }
