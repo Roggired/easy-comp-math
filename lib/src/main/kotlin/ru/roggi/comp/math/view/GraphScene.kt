@@ -10,7 +10,7 @@ import ru.roggi.console.application.view.scene.SceneContext
 import ru.roggi.console.application.view.scene.StatefulScene
 
 
-class GraphIntent(
+open class GraphIntent(
     val accuracy: Double,
     val leftBound: Double,
     val rightBound: Double,
