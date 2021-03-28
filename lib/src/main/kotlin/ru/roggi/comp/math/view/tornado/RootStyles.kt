@@ -5,8 +5,8 @@ import tornadofx.px
 
 class RootStyles : Stylesheet() {
     companion object {
-        const val PREF_HEIGHT = 720
-        const val PREF_WIDTH = 1280
+        const val PREF_HEIGHT = 600
+        const val PREF_WIDTH = 950
     }
 
     init {
