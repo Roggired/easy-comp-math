@@ -87,6 +87,12 @@ class Presenter {
                         append(presentSignAndFactorErasureOne(term.sign, term.factor))
                         append(presentMultiTerm(term))
                     }
+                    is ExponentialTerm -> {
+                        append(presentSignAndFactor(term.sign, term.factor))
+                        append(presentEquation(term.baseEquation))
+                        append("^")
+                        append(presentEquation(term.equationPower))
+                    }
                     else -> {/*nothing*/}
                 }
             }

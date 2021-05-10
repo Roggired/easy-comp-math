@@ -89,6 +89,8 @@ class Operation(private val op: String) {
             "/" -> acc / value
             else -> acc
         }
+
+    override fun toString(): String = op
 }
 
 class MultiTerm(
@@ -200,5 +202,20 @@ class LogarithmicTerm(
 
     override fun toString(): String {
         return "LogarithmicTerm(logBase=$logBase)" + " " + super.toString()
+    }
+}
+
+class ExponentialTerm(
+    sign: Sign,
+    factor: Double,
+    baseEquation: Equation,
+    internal val equationPower: Equation
+): ComplexTerm(sign, factor, baseEquation) {
+    override fun evaluate(x: Double): Double {
+        return super.evaluate(x) * baseEquation.evaluate(x).pow(equationPower.evaluate(x))
+    }
+
+    override fun toString(): String {
+        return "ExponentialTerm(equationPower=$equationPower)"
     }
 }
